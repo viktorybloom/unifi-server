@@ -1,16 +1,14 @@
 set -euo pipefail
 
 sudo apt-get update
-sudo apt-get install -y curl jq podman slirp4netns
+sudo apt-get install -y curl podman slirp4netns
 
-URL="$(
-  curl -fsSL 'https://www.ui.com/download' |
-  grep -oE 'https://fw-download\.ubnt\.com/data/unifi-os-server/[^" ]*linux-x64[^" ]*' |
-  head -n1
-)"
+URL="https://fw-download.ubnt.com/data/unifi-os-server/5172-linux-x64-5.1.42-12e9e3cf-8f8b-4e54-928c-76b80a10c8a4.42-x64"
 
-curl -fL "$URL" -o /tmp/unifi-os-server
-chmod +x /tmp/unifi-os-server
-sudo /tmp/unifi-os-server
+curl -fL "$URL" -o ./unifi-os-server
+chmod +x ./unifi-os-server
+sudo ./unifi-os-server
 
+sudo systemctl daemon-reload
 sudo systemctl enable --now uosserver
+sudo systemctl status uosserver --no-pager
